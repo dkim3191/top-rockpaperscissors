@@ -1,5 +1,10 @@
+let humanScore = 0;
+let computerScore = 0;
+const result = document.querySelector("#result");
+const score = document.querySelector("#score");
+
 function getComputerChoice() {
-    const num = Math.floor(Math.random() * 3);
+    let num = Math.floor(Math.random() * 3);
     switch (num) {
         case 0:
             return 'ROCK';
@@ -20,33 +25,43 @@ function playRound(humanChoice, computerChoice) {
         || (humanChoice == 'PAPER' && computerChoice == 'ROCK')
         || (humanChoice == 'SCISSORS' && computerChoice == 'PAPER')) {
         humanScore++;
-        console.log(`You win! ${humanChoice} beats ${computerChoice}`);
-        return;
-    }
-    if ((humanChoice == 'SCISSORS' && computerChoice == 'ROCK')
+        result.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
+    } else if ((humanChoice == 'SCISSORS' && computerChoice == 'ROCK')
         || (humanChoice == 'ROCK' && computerChoice == 'PAPER')
         || (humanChoice == 'PAPER' && computerChoice == 'SCISSORS')) {
         computerScore++;
-        console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+        result.textContent = `You lose! ${computerChoice} beats ${humanChoice}`;
         return;
+    } else {
+        result.textContent = "It's a tie!";
     }
-    console.log("It's a tie!");
 }
-
-let humanScore = 0;
-let computerScore = 0;
+const over = document.querySelector("#over");
 
 function playGame() {
-    while ((humanScore + computerScore) !== 5) {
-        playRound(getHumanChoice(), getComputerChoice());
-        console.log(`Current score: You-${humanScore} --- Computer-${computerScore}`);
-    }
-    
-    if (humanScore > computerScore) {
-        console.log("You are the WINNER!!!");
-    } else {
-        console.log("You are the LOSER!!!");
-    }
+
+    const options = document.querySelector("#options");
+    options.addEventListener("click", (e) => {
+        if (humanScore != 5 && computerScore != 5) {
+            switch (e.target.id) {
+                case "rock":
+                    playRound('ROCK', getComputerChoice());
+                    break;
+                case "paper":
+                    playRound('PAPER', getComputerChoice());
+                    break;
+                case "scissors":
+                    playRound('SCISSORS', getComputerChoice());
+                    break;
+            }
+            score.textContent = `You: ${humanScore} Computer: ${computerScore}`;
+        }
+        if (humanScore == 5) {
+            over.textContent = "You are the WINNER!!!"
+        } else if (computerScore == 5) {
+            over.textContent = "You are the LOSER!!!";
+        }
+    });
 }
 
 playGame();
